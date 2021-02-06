@@ -10,7 +10,7 @@ export type FilterValuesType = 'all' | 'completed' | 'active';
 type TodoListType = {
     id: string,
     title: string,
-    filter: string
+    filter: FilterValuesType
 }
 
 function App() {
