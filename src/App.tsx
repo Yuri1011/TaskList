@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 import {TaskType, TodoList} from "./TodoList";
 import {v1} from "uuid";
+import {AddItemForm} from "./AddItemForm";
 
 type TaskStateType = {
     [key: string]: Array<TaskType>
@@ -17,7 +18,6 @@ function App() {
     let todoListId_1 = v1();
     let todoListId_2 = v1();
 
-
     let [todoLists, setTodoLists] = useState<Array<TodoListType>>([
         {
             id: todoListId_1,
@@ -30,7 +30,6 @@ function App() {
             filter: 'all'
         }
     ])
-
     let [tasks, setTasks] = useState<TaskStateType>({
         [todoListId_1]:
             [
@@ -81,14 +80,28 @@ function App() {
         }
     }
 
+    function addTodoList(title: string) {
+        let todoList: TodoListType = {
+            id: v1(),
+            filter: 'all',
+            title: title
+        };
+        setTodoLists([todoList, ...todoLists]);
+        setTasks({
+            ...tasks,
+            [todoList.id]: []
+        })
+    }
+
     return (
         <div className="App">
+            <AddItemForm addItem={addTodoList}/>
             {
                 todoLists.map(tl => {
-                        let allTodoListTasks = tasks[tl.id];
-                        let tasksForTodoList = allTodoListTasks;
+                    let allTodoListTasks = tasks[tl.id];
+                    let tasksForTodoList = allTodoListTasks;
 
-                        if (tl.filter === 'active') {
+                    if (tl.filter === 'active') {
                             tasksForTodoList = allTodoListTasks.filter(task => !task.isDone);
                         }
                         if (tl.filter === 'completed') {
